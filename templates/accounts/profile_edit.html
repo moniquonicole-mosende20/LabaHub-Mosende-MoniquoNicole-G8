@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile - LabaHub{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h3 class="mb-3">Edit profile</h3>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {% include 'accounts/_form_fields.html' %}
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

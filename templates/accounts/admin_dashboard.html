@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard - LabaHub{% endblock %}
+{% block content %}
+<h3 class="mb-4">Admin Dashboard</h3>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body">
+    <div class="display-6">{{ total_users }}</div><div class="text-muted">Total users</div>
+  </div></div></div>
+  <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body">
+    <div class="display-6">{{ total_customers }}</div><div class="text-muted">Customers</div>
+  </div></div></div>
+  <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body">
+    <div class="display-6">{{ total_admins }}</div><div class="text-muted">Admins</div>
+  </div></div></div>
+</div>
+<div class="card shadow-sm">
+  <div class="card-header">Recently registered users</div>
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody>
+        {% for u in recent_users %}
+        <tr>
+          <td>{{ u.username }}</td><td>{{ u.email }}</td>
+          <td>{{ u.get_role_display }}</td><td>{{ u.date_joined|date:"M d, Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
