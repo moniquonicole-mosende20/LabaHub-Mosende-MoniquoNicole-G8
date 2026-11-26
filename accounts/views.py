@@ -9,6 +9,8 @@ from django.views.decorators.http import require_POST
 from .decorators import role_required
 from .forms import LoginForm, ProfileForm, RegisterForm
 from .models import User
+from django.db.models import Sum
+from orders.models import Order
 
 
 def home(request):
@@ -63,18 +65,33 @@ def dashboard_redirect(request):
 
 @role_required(User.Role.ADMIN)
 def admin_dashboard(request):
+    orders = Order.objects.select_related('customer', 'service')
+    revenue = Order.objects.filter(status=Order.Status.COMPLETED).aggregate(
+        total=Sum('total_price'))['total'] or 0
     context = {
         'total_users': User.objects.count(),
         'total_customers': User.objects.filter(role=User.Role.CUSTOMER).count(),
         'total_admins': User.objects.filter(role=User.Role.ADMIN).count(),
         'recent_users': User.objects.order_by('-date_joined')[:5],
+        'total_orders': Order.objects.count(),
+        'pending_orders': Order.objects.filter(status=Order.Status.PENDING).count(),
+        'revenue': revenue,
+        'recent_orders': orders[:5],
     }
     return render(request, 'accounts/admin_dashboard.html', context)
 
 
 @role_required(User.Role.CUSTOMER)
 def customer_dashboard(request):
-    return render(request, 'accounts/customer_dashboard.html')
+    orders = Order.objects.filter(customer=request.user).select_related('service')
+    active = [Order.Status.PENDING, Order.Status.WASHING, Order.Status.READY]
+    context = {
+        'total_count': orders.count(),
+        'active_count': orders.filter(status__in=active).count(),
+        'completed_count': orders.filter(status=Order.Status.COMPLETED).count(),
+        'recent_orders': orders[:5],
+    }
+    return render(request, 'accounts/customer_dashboard.html', context)
 
 
 @login_required

@@ -25,6 +25,7 @@
           {% else %}
             <li class="nav-item"><a class="nav-link" href="{% url 'customer_dashboard' %}">My Dashboard</a></li>
           {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'order_list' %}">{% if user.role == 'admin' %}Orders{% else %}My Orders{% endif %}</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
         {% endif %}
       </ul>

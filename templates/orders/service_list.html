@@ -49,7 +49,8 @@
       <div class="card-body">
         <h5>{{ s.name }}</h5>
         <p class="text-muted">{{ s.description|default:"No description." }}</p>
-        <div class="fw-bold">₱{{ s.price_per_kg }} / kg</div>
+        <div class="fw-bold">₱{{ s.price_per_kg }} / kg</div>        
+        <a href="{% url 'order_create' %}?service={{ s.pk }}" class="btn btn-primary btn-sm mt-3">Order this service</a>
       </div>
     </div>
   </div>
