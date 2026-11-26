@@ -37,3 +37,31 @@ Django (templates), PostgreSQL via Supabase, Bootstrap 5
 ## Roles
 - **Customer**: created through the registration form.
 - **Admin**: created with `createsuperuser` or by changing a user's role in the Django admin.
+
+## Core feature: Laundry Order Management
+Customers book laundry pickups and track their orders; admins manage services and order status.
+
+**Customer**
+- Browse available services and place an order (service, estimated weight, pickup address and date, notes)
+- The total price is computed automatically (weight x price per kg)
+- View, edit (pending only), cancel, and delete their own orders
+- Dashboard shows active, completed, and recent orders
+
+**Admin**
+- Create, edit, and delete services (a service with orders can only be marked unavailable)
+- View all orders, filter by status, and update status (Pending, Washing, Ready, Completed, Cancelled)
+- Dashboard shows total orders, pending orders, completed revenue, and recent orders
+
+**Validation and rules**
+- Weight must be 1 to 50 kg; pickup date cannot be in the past; address is required
+- Completed or cancelled orders cannot be changed
+- Customers can only open their own orders; other users get a 404
+- Only logged-in users can access the feature; role-based pages redirect other roles
+
+**Database relationships**
+- User (1) to (many) Order
+- Service (1) to (many) Order
+
+## Test accounts
+- Admin: see the completion report
+- Customer: register through the registration form
