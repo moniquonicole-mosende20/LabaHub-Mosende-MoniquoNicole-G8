@@ -1,0 +1,27 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle mb-0">
+    <thead>
+      <tr>
+        <th>#</th>
+        {% if show_customer %}<th>Customer</th>{% endif %}
+        <th>Service</th><th>Weight</th><th>Pickup date</th><th>Total</th><th>Status</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.pk }}</td>
+        {% if show_customer %}<td>{{ o.customer.username }}</td>{% endif %}
+        <td>{{ o.service.name }}</td>
+        <td>{{ o.weight_kg }} kg</td>
+        <td>{{ o.pickup_date|date:"M d, Y" }}</td>
+        <td>₱{{ o.total_price }}</td>
+        <td><span class="badge bg-{{ o.badge_class }}">{{ o.get_status_display }}</span></td>
+        <td class="text-end"><a href="{% url 'order_detail' o.pk %}" class="btn btn-sm btn-outline-primary">View</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" class="text-center text-muted py-4">No orders yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

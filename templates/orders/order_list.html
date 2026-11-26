@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Orders - LabaHub{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="mb-0">{% if user.role == 'admin' %}All Orders{% else %}My Orders{% endif %}</h3>
+  {% if user.role == 'customer' %}
+    <a href="{% url 'order_create' %}" class="btn btn-primary">+ New order</a>
+  {% endif %}
+</div>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-auto">
+    <select name="status" class="form-select">
+      <option value="">All statuses</option>
+      {% for value, label in statuses %}
+        <option value="{{ value }}" {% if value == selected %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto"><button type="submit" class="btn btn-outline-primary">Filter</button></div>
+</form>
+
+<div class="card shadow-sm">
+  {% if user.role == 'admin' %}
+    {% include 'orders/_order_table.html' with show_customer=True %}
+  {% else %}
+    {% include 'orders/_order_table.html' %}
+  {% endif %}
+</div>
+{% endblock %}
